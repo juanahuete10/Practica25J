@@ -4,14 +4,13 @@ import {getAuth} from "firebase/auth";
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDIRq5o5k3eh9yVb_fqFOUEp5mocGGcbBM",
-    authDomain: "entregaindividual10-03-2025.firebaseapp.com",
-    projectId: "entregaindividual10-03-2025",
-    storageBucket: "entregaindividual10-03-2025.firebasestorage.app",
-    messagingSenderId: "109693068494",
-    appId: "1:109693068494:web:777ebbb126546d10455c9f",
-    measurementId: "G-DH3M24JK6D"
-  };
+  apiKey: "AIzaSyC50ZaX1Jzgknq1AEPBgQ3cuBOHfCnQqKc",
+  authDomain: "proyecto25j.firebaseapp.com",
+  projectId: "proyecto25j",
+  storageBucket: "proyecto25j.firebasestorage.app",
+  messagingSenderId: "763755141867",
+  appId: "1:763755141867:web:c9ea7ad352341b90b4fcae"
+};
 
 // Initialize Firebase
 const appfirebase = initializeApp(firebaseConfig);
