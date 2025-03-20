@@ -21,3 +21,8 @@
 .color-texto-marca:hover {
   filter: brightness(1.2);
 }
+
+.margen-superior-main {
+  margin-top: 60px;
+}
+
