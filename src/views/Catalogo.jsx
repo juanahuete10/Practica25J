@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Form, Col } from "react-bootstrap";
-import { db } from "../database/firebaseconfig";
+import { db } from "../../src/database/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import TarjetaProducto from "../components/catalogo/TarjetaProducto";
 
