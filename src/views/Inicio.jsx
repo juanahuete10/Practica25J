@@ -11,11 +11,17 @@ const Inicio = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Inicio</h1>
-      <button style={styles.button} onClick={() => handleNavigate("/categorias")}>
+      <button
+        style={styles.button}
+        onClick={() => handleNavigate("/categorias")}
+      >
         Ir a Categorías
-        <button onClick={() => handleNavigate("/productos")} >Ir a Productos</button>
-
-        <button onClick={() => handleNavigate("/catalogo")} >Ir a Catalogo</button>
+        <button onClick={() => handleNavigate("/productos")}>
+          Ir a Productos
+        </button>
+        <button onClick={() => handleNavigate("/catalogo")}>
+          Ir a Catalogo
+        </button>
       </button>
     </div>
   );

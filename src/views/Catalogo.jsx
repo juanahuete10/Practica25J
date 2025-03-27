@@ -1,20 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Form, Col } from "react-bootstrap";
-import { db } from "../../src/database/firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
+import { db } from "../database/firebaseConfig";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc
+} from "firebase/firestore";
 import TarjetaProducto from "../components/catalogo/TarjetaProducto";
+import ModalEdicionProducto from "../components/productos/ModalEdicionProducto";
 
-const Catalogo= () => {
+const Catalogo = () => {
   const [productos, setProductos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("Todas");
 
+  // 🔧 Estados para edición
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [productoEditado, setProductoEditado] = useState(null);
+
   const productosCollection = collection(db, "productos");
   const categoriasCollection = collection(db, "categorias");
 
+  //  Obtener datos
   const fetchData = async () => {
     try {
-      // Obtener productos
       const productosData = await getDocs(productosCollection);
       const fetchedProductos = productosData.docs.map((doc) => ({
         ...doc.data(),
@@ -22,7 +32,6 @@ const Catalogo= () => {
       }));
       setProductos(fetchedProductos);
 
-      // Obtener categorías
       const categoriasData = await getDocs(categoriasCollection);
       const fetchedCategorias = categoriasData.docs.map((doc) => ({
         ...doc.data(),
@@ -38,7 +47,44 @@ const Catalogo= () => {
     fetchData();
   }, []);
 
-  // Filtrar productos por categoría
+  //  Funciones de edición reutilizadas
+  const openEditModal = (producto) => {
+    setProductoEditado({ ...producto });
+    setShowEditModal(true);
+  };
+
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setProductoEditado((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProductoEditado((prev) => ({ ...prev, imagen: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleEditProducto = async () => {
+    if (!productoEditado.nombre || !productoEditado.precio || !productoEditado.categoria) {
+      alert("Por favor, completa todos los campos requeridos.");
+      return;
+    }
+    try {
+      const productoRef = doc(db, "productos", productoEditado.id);
+      await updateDoc(productoRef, productoEditado);
+      setShowEditModal(false);
+      await fetchData();
+    } catch (error) {
+      console.error("Error al actualizar producto:", error);
+    }
+  };
+
+  //  Filtrar productos
   const productosFiltrados = categoriaSeleccionada === "Todas"
     ? productos
     : productos.filter((producto) => producto.categoria === categoriaSeleccionada);
@@ -47,7 +93,8 @@ const Catalogo= () => {
     <Container className="mt-5">
       <br />
       <h4>Catálogo de Productos</h4>
-      {/* Filtro de categorías */}
+
+      {/*  Filtro de Categorías */}
       <Row>
         <Col lg={3} md={3} sm={6}>
           <Form.Group className="mb-3">
@@ -67,16 +114,31 @@ const Catalogo= () => {
         </Col>
       </Row>
 
-      {/* Catálogo de productos filtrados */}
+      {/* Tarjetas de Productos */}
       <Row>
         {productosFiltrados.length > 0 ? (
           productosFiltrados.map((producto) => (
-            <TarjetaProducto key={producto.id} producto={producto} />
+            <TarjetaProducto
+              key={producto.id}
+              producto={producto}
+              openEditModal={openEditModal}
+            />
           ))
         ) : (
           <p>No hay productos en esta categoría.</p>
         )}
       </Row>
+
+      {/* 🛠️ Modal de Edición */}
+      <ModalEdicionProducto
+        showEditModal={showEditModal}
+        setShowEditModal={setShowEditModal}
+        productoEditado={productoEditado}
+        handleEditInputChange={handleEditInputChange}
+        handleEditImageChange={handleEditImageChange}
+        handleEditProducto={handleEditProducto}
+        categorias={categorias}
+      />
     </Container>
   );
 };
