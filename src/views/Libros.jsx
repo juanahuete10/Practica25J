@@ -11,10 +11,10 @@ import {
   doc,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import TablaLibros from "../components/libros/TablaLibros";
+import TablaLibros from "../components/Libros/TablaLibros";
 import ModalRegistroLibro from "../components/libros/ModalRegistroLibro";
 import ModalEdicionLibro from "../components/libros/ModalEdicionLibro";
-import ModalEliminacionLibro from "../components/libros/ModalEliminacionLibro";
+import ModalEliminacionLibro from "../components/Libros/ModalEliminacionLibro";
 import { useAuth } from "../database/AuthContext";
 
 const Libros = () => {
