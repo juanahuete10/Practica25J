@@ -7,7 +7,7 @@ import Inicio from "./views/Inicio";
 import Categorias from "./views/categorias";// importacion de categorias
 import Productos from "./views/Productos";
 import Libros from "./views/Libros";
-import Catalogo from "./views/catalogo";
+import Catalogo from "./views/Catalogo";
 
 import './App.css'
 
