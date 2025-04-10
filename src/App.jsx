@@ -4,7 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Login from './views/Login'
 import Encabezado from "./components/Encabezado";
 import Inicio from "./views/Inicio";
-import Categorias from "./views/Categorias";// importacion de categorias
+import Categorias from "./views/Categorias"
 import Productos from "./views/Productos";
 import Libros from "./views/Libros";
 import Catalogo from "./views/Catalogo";
