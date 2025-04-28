@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 
 // Importaciones de componentes personalizados
-import TablaCategorias from "../components/Categorias/TablaCategorias";
+import TablaCategorias from "../components/categorias/Tablacategorias";
 import ModalRegistroCategoria from "../components/Categorias/ModalRegistroCategoria";
 import ModalEdicionCategoria from "../components/Categorias/ModalEdicionCategoria";
 import ModalEliminacionCategoria from "../components/Categorias/ModalEliminacionCategoria";
