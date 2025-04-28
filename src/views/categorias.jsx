@@ -52,10 +52,8 @@ const Categorias = () => {
     };
   }, []);
 
-  // Referencia a colección
   const categoriasCollection = collection(db, "categorias");
 
-  // Obtener categorías con escucha en tiempo real
   const fetchCategorias = () => {
     const stopListening = onSnapshot(
       categoriasCollection,
@@ -115,20 +113,45 @@ const Categorias = () => {
     }));
   };
 
+  // Agregar categoría
   const handleAddCategoria = async () => {
     if (!nuevaCategoria.nombre || !nuevaCategoria.descripcion) {
       alert("Por favor, completa todos los campos antes de guardar.");
       return;
     }
+
+    setShowModal(false);
+
+    const tempId = `temp_${Date.now()}`;
+    const categoriaConId = { ...nuevaCategoria, id: tempId };
+
     try {
-      await addDoc(categoriasCollection, nuevaCategoria);
-      setShowModal(false);
+      setCategorias((prev) => [...prev, categoriaConId]);
+      setCategoriasFiltradas((prev) => [...prev, categoriaConId]);
+
       setNuevaCategoria({ nombre: "", descripcion: "" });
+
+      await addDoc(categoriasCollection, nuevaCategoria);
+
+      if (isOffline) {
+        console.log("Categoría agregada localmente (sin conexión).");
+      } else {
+        console.log("Categoría agregada exitosamente en la nube.");
+      }
     } catch (error) {
       console.error("Error al agregar la categoría:", error);
+
+      if (isOffline) {
+        console.log("Offline: Categoría almacenada localmente.");
+      } else {
+        setCategorias((prev) => prev.filter((cat) => cat.id !== tempId));
+        setCategoriasFiltradas((prev) => prev.filter((cat) => cat.id !== tempId));
+        alert("Error al agregar la categoría: " + error.message);
+      }
     }
   };
 
+  // Editar categoría
   const handleEditCategoria = async () => {
     if (!categoriaEditada?.nombre || !categoriaEditada?.descripcion) {
       alert("Por favor, completa todos los campos antes de actualizar.");
@@ -176,14 +199,33 @@ const Categorias = () => {
     }
   };
 
+  // Eliminar categoría
   const handleDeleteCategoria = async () => {
-    if (categoriaAEliminar) {
-      try {
-        const categoriaRef = doc(db, "categorias", categoriaAEliminar.id);
-        await deleteDoc(categoriaRef);
-        setShowDeleteModal(false);
-      } catch (error) {
-        console.error("Error al eliminar la categoría:", error);
+    if (!categoriaAEliminar) return;
+
+    setShowDeleteModal(false);
+
+    try {
+      setCategorias((prev) => prev.filter((cat) => cat.id !== categoriaAEliminar.id));
+      setCategoriasFiltradas((prev) => prev.filter((cat) => cat.id !== categoriaAEliminar.id));
+
+      const categoriaRef = doc(db, "categorias", categoriaAEliminar.id);
+      await deleteDoc(categoriaRef);
+
+      if (isOffline) {
+        console.log("Categoría eliminada localmente (sin conexión).");
+      } else {
+        console.log("Categoría eliminada exitosamente en la nube.");
+      }
+    } catch (error) {
+      console.error("Error al eliminar la categoría:", error);
+
+      if (isOffline) {
+        console.log("Offline: Eliminación almacenada localmente.");
+      } else {
+        setCategorias((prev) => [...prev, categoriaAEliminar]);
+        setCategoriasFiltradas((prev) => [...prev, categoriaAEliminar]);
+        alert("Error al eliminar la categoría: " + error.message);
       }
     }
   };
