@@ -1,12 +1,13 @@
 import React from "react";
 import { Table, Button, Image } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import Paginacion from "../ordenamiento/Paginacion"; // ✅ Importación añadida
+import Paginacion from "../ordenamiento/Paginacion";
 
 const TablaProductos = ({
   productos,
   openEditModal,
   openDeleteModal,
+  handleCopy,
   totalItems,
   itemsPerPage,
   currentPage,
@@ -47,9 +48,17 @@ const TablaProductos = ({
                 <Button
                   variant="outline-danger"
                   size="sm"
+                  className="me-2"
                   onClick={() => openDeleteModal(producto)}
                 >
                   <i className="bi bi-trash"></i>
+                </Button>
+                <Button
+                  variant="outline-info"
+                  size="sm"
+                  onClick={() => handleCopy(producto)}
+                >
+                  <i className="bi bi-clipboard"></i>
                 </Button>
               </td>
             </tr>
@@ -57,7 +66,6 @@ const TablaProductos = ({
         </tbody>
       </Table>
 
-      {/* ✅ Paginación debajo de la tabla */}
       <Paginacion
         itemsPerPage={itemsPerPage}
         totalItems={totalItems}

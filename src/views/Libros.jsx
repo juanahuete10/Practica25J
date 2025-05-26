@@ -2,19 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Container, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { db, storage } from "../database/firebaseConfig";
-import {
-  collection,
-  getDocs,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-} from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import {collection,getDocs,addDoc,updateDoc,deleteDoc,doc,} from "firebase/firestore";
+import {ref,uploadBytes,getDownloadURL,deleteObject,} from "firebase/storage";
 import TablaLibros from "../../src/components/Libros/TablaLibros";
 import ModalRegistroLibro from "../../src/components/Libros/ModalRegistroLibro";
 import ModalEdicionLibro from "../../src/components/Libros/ModalEdicionLibro";
 import ModalEliminacionLibro from "../../src/components/Libros/ModalEliminacionLibro";
+import ModalQR from "../components/qr/ModalQR"; 
 import { useAuth } from "../database/AuthContext";
 
 const Libros = () => {
@@ -35,8 +29,22 @@ const Libros = () => {
 
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
-
   const librosCollection = collection(db, "libros");
+
+
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [selectedUrl, setSelectedUrl] = useState("");
+
+
+  const openQRModal = (url) => {
+    setSelectedUrl(url);
+    setShowQRModal(true);
+  };
+
+  const handleCloseQRModal = () => {
+    setShowQRModal(false);
+    setSelectedUrl("");
+  };
 
   const fetchData = async () => {
     try {
@@ -95,7 +103,12 @@ const Libros = () => {
       return;
     }
 
-    if (!nuevoLibro.nombre || !nuevoLibro.autor || !nuevoLibro.genero || !pdfFile) {
+    if (
+      !nuevoLibro.nombre ||
+      !nuevoLibro.autor ||
+      !nuevoLibro.genero ||
+      !pdfFile
+    ) {
       alert("Por favor, completa todos los campos y selecciona un PDF.");
       return;
     }
@@ -122,7 +135,11 @@ const Libros = () => {
       return;
     }
 
-    if (!libroEditado.nombre || !libroEditado.autor || !libroEditado.genero) {
+    if (
+      !libroEditado.nombre ||
+      !libroEditado.autor ||
+      !libroEditado.genero
+    ) {
       alert("Por favor, completa todos los campos requeridos.");
       return;
     }
@@ -199,6 +216,7 @@ const Libros = () => {
         libros={libros}
         openEditModal={openEditModal}
         openDeleteModal={openDeleteModal}
+        openQRModal={openQRModal} // ✅ 5. Pasar el método a TablaLibros
       />
       <ModalRegistroLibro
         showModal={showModal}
@@ -220,6 +238,12 @@ const Libros = () => {
         showDeleteModal={showDeleteModal}
         setShowDeleteModal={setShowDeleteModal}
         handleDeleteLibro={handleDeleteLibro}
+      />
+ 
+      <ModalQR
+        show={showQRModal}
+        handleClose={handleCloseQRModal}
+        qrUrl={selectedUrl}
       />
     </Container>
   );
