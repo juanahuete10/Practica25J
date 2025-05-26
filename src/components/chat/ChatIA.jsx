@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { collection, addDoc, onSnapshot, orderBy, query } from "firebase/firestore";
-import { db } from "../../database/firebaseconfig";
+import { db } from "../../database/firebaseConfig";
 import { Button, Form, ListGroup, Spinner, Modal } from "react-bootstrap";
 
 // Función para obtener respuesta desde Google AI API
