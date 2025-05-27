@@ -8,10 +8,11 @@ const TablaProductos = ({
   openEditModal,
   openDeleteModal,
   handleCopy,
+  generarPDFDetalleProducto,
   totalItems,
   itemsPerPage,
   currentPage,
-  setCurrentPage
+  setCurrentPage,
 }) => {
   return (
     <>
@@ -56,9 +57,18 @@ const TablaProductos = ({
                 <Button
                   variant="outline-info"
                   size="sm"
+                  className="me-2"
                   onClick={() => handleCopy(producto)}
                 >
                   <i className="bi bi-clipboard"></i>
+                </Button>
+                <Button
+                  variant="outline-success"
+                  size="sm"
+                  title="Generar PDF"
+                  onClick={() => generarPDFDetalleProducto(producto)}
+                >
+                  <i className="bi bi-file-earmark-pdf-fill"></i>
                 </Button>
               </td>
             </tr>
