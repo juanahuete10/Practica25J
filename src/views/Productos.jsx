@@ -1,7 +1,7 @@
 // Importaciones
 import React, { useState, useEffect } from "react";
 import { Container, Button, Toast, Col, Row } from "react-bootstrap";
-import { db } from "../database/firebaseconfig";
+import { db } from "../database/firebaseConfig";
 import {
   collection,
   addDoc,
